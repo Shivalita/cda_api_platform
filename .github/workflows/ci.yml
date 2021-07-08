@@ -45,12 +45,7 @@ jobs:
         run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T php bin/console doctrine:schema:validate --skip-sync
       - name: Jest
         run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T pwa yarn test --ci --passWithNoTests
-      
-  createPullRequest:
-    runs-on: ubuntu-latest
-    steps:
       - name: Create Pull Request
-        if: steps.tests.outputs.exit-code == 2
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.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 }}
