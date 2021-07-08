@@ -52,4 +52,5 @@ jobs:
           commit-message: Pull Request after Push on Main branch
           title: Create Pull Request after Push on Main branch
           body: This Pull Request is auto-generated after a Push on Main branch in case of successful test run.
-          branch: master
+          branch: master-temp
+          base: master
