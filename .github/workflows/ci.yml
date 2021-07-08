@@ -53,9 +53,9 @@ jobs:
       - name: Create Pull Request
         if: steps.tests.outputs.exit-code == 2
         uses: peter-evans/create-pull-request@v3
-          with:
-            token: ${{ secrets.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 }}
-            commit-message: Pull Request after Push on Main branch
-            title: Create Pull Request after Push on Main branch
-            body: This Pull Request is auto-generated after a Push on Main branch in case of successful test run.
-            branch: master
+        with:
+          token: ${{ secrets.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 }}
+          commit-message: Pull Request after Push on Main branch
+          title: Create Pull Request after Push on Main branch
+          body: This Pull Request is auto-generated after a Push on Main branch in case of successful test run.
+          branch: master
