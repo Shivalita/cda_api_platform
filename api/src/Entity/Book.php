@@ -27,7 +27,7 @@ class Book
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $author;
+    private $author; 
 
     /**
      * @ORM\Column(type="date")
