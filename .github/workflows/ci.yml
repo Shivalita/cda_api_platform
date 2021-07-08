@@ -1,56 +1,55 @@
 name: CI
-
 on:
   push:
     branches:
       - main
 jobs:
-  Tests:
-  runs-on: ubuntu-latest
-  env:
-    NEXT_PUBLIC_ENTRYPOINT: https://localhost
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Pull images
-      run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml pull --ignore-pull-failures || true
-    - name: Start services
-      run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build -d
-    - name: Wait for services
-      run: |
-        while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q php)")"; do
-          case $status in
-            starting) sleep 1;;
-            healthy) exit 0;;
-            unhealthy)
-              docker-compose ps
-              docker-compose logs
-              exit 1
-            ;;
-          esac
-        done
-        exit 1
-    - name: Check HTTP reachability
-      run: curl -v -o /dev/null http://localhost
-    - name: Check HTTPS reachability
-      run: curl  -vk -o /dev/null https://localhost
-    - name: Install PHPUnit
-      run: docker-compose exec -T php composer require -n symfony/test-pack symfony/http-client justinrainbow/json-schema 
-    - name: ls
-      run: docker-compose exec -T php ls -al 
-    - name: pwd
-      run: docker-compose exec -T php pwd
-    - name: PHPUnit
-      run: docker-compose exec -T php vendor/bin/phpunit /srv/api/tests
-    - name: Doctrine Schema Validator
-      run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T php bin/console doctrine:schema:validate --skip-sync
-    - name: Jest
-      run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T pwa yarn test --ci --passWithNoTests
+  tests:
+    runs-on: ubuntu-latest
+    env:
+      NEXT_PUBLIC_ENTRYPOINT: https://localhost
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Pull images
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml pull --ignore-pull-failures || true
+      - name: Start services
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml up --build -d
+      - name: Wait for services
+        run: |
+          while status="$(docker inspect --format="{{if .Config.Healthcheck}}{{print .State.Health.Status}}{{end}}" "$(docker-compose ps -q php)")"; do
+            case $status in
+              starting) sleep 1;;
+              healthy) exit 0;;
+              unhealthy)
+                docker-compose ps
+                docker-compose logs
+                exit 1
+              ;;
+            esac
+          done
+          exit 1
+      - name: Check HTTP reachability
+        run: curl -v -o /dev/null http://localhost
+      - name: Check HTTPS reachability
+        run: curl  -vk -o /dev/null https://localhost
+      - name: Install PHPUnit
+        run: docker-compose exec -T php composer require -n symfony/test-pack symfony/http-client justinrainbow/json-schema 
+      - name: ls
+        run: docker-compose exec -T php ls -al 
+      - name: pwd
+        run: docker-compose exec -T php pwd
+      - name: PHPUnit
+        run: docker-compose exec -T php vendor/bin/phpunit /srv/api/tests
+      - name: Doctrine Schema Validator
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T php bin/console doctrine:schema:validate --skip-sync
+      - name: Jest
+        run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T pwa yarn test --ci --passWithNoTests
       
-  CreatePullRequest:
+  createPullRequest:
     steps:
       - name: Create Pull Request
-        if: steps.Tests.outputs.exit-code == 2
+        if: steps.tests.outputs.exit-code == 2
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.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 }}
