@@ -47,6 +47,7 @@ jobs:
         run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T pwa yarn test --ci --passWithNoTests
       
   createPullRequest:
+    runs-on: ubuntu-latest
     steps:
       - name: Create Pull Request
         if: steps.tests.outputs.exit-code == 2
