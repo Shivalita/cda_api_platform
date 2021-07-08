@@ -27,7 +27,7 @@ class Book
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $author; 
+    private $author;
 
     /**
      * @ORM\Column(type="date")
@@ -36,7 +36,7 @@ class Book
 
     public function getId(): ?int
     {
-        return $this->id;  
+        return $this->id;
     }
 
     public function getName(): ?string
