@@ -46,10 +46,12 @@ jobs:
       - name: Jest
         run: docker-compose -f docker-compose.yml -f docker-compose.ci.yml exec -T pwa yarn test --ci --passWithNoTests
       - name: Create Pull Request
+        id: cpr
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.CRED_TOKEN }}
           commit-message: Pull Request after Push on Main branch
           title: Create Pull Request after Push on Main branch
           body: This Pull Request is auto-generated after a Push on Main branch in case of successful test run.
-          base: master
+          branch: master
+          base: main
