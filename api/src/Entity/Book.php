@@ -12,36 +12,36 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource]
 class Book
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
+/**
+ * @ORM\Id
+ * @ORM\GeneratedValue
+ * @ORM\Column(type="integer")
+ */
+private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
+/**
+ * @ORM\Column(type="string", length=255)
+ */
+private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $author;
+/**
+ * @ORM\Column(type="string", length=255)
+ */
+private $author;
 
-    /**
-     * @ORM\Column(type="date")
-     */
-    private $datePublished;
+/**
+ * @ORM\Column(type="date")
+ */
+private $datePublished;
 
     public function getId(): ?int
     {
-        return $this->id;
+    return $this->id;
     }
 
     public function getName(): ?string
     {
-        return $this->name;
+        return $this->name   ;
     }
 
     public function setName(string $name): self
